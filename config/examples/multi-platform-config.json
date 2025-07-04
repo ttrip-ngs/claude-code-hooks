@@ -1,0 +1,96 @@
+{
+  "hooks": {
+    "notification": {
+      "slack_notifications": [
+        {
+          "channel": "#alerts",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+          "enabled": true,
+          "description": "Slack通知チャンネル"
+        }
+      ],
+      "discord_notifications": [
+        {
+          "channel": "bot-alerts",
+          "webhook_url": "https://discord.com/api/webhooks/YOUR/DISCORD/WEBHOOK",
+          "enabled": true,
+          "description": "Discord通知チャンネル"
+        }
+      ],
+      "teams_notifications": [
+        {
+          "channel": "Development Team",
+          "webhook_url": "https://outlook.office.com/webhook/YOUR/TEAMS/WEBHOOK",
+          "enabled": false,
+          "description": "Microsoft Teams通知（将来の拡張用）"
+        }
+      ]
+    },
+    "stop": {
+      "slack_notifications": [
+        {
+          "channel": "UJM1V2AAH",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+          "enabled": true,
+          "description": "個人通知"
+        },
+        {
+          "channel": "#project-updates",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+          "enabled": false,
+          "description": "プロジェクト更新通知"
+        }
+      ],
+      "email_notifications": [
+        {
+          "to": "your-email@example.com",
+          "smtp_server": "smtp.gmail.com",
+          "smtp_port": 587,
+          "enabled": false,
+          "description": "メール通知（将来の拡張用）"
+        }
+      ]
+    },
+    "subagent_stop": {
+      "slack_notifications": [
+        {
+          "channel": "UJM1V2AAH",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+          "enabled": true,
+          "description": "サブエージェント完了通知"
+        },
+        {
+          "channel": "#subagent-monitoring",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+          "enabled": false,
+          "description": "サブエージェント監視チャンネル"
+        }
+      ],
+      "discord_notifications": [
+        {
+          "channel": "subagent-logs",
+          "webhook_url": "https://discord.com/api/webhooks/YOUR/DISCORD/WEBHOOK",
+          "enabled": false,
+          "description": "Discordサブエージェントログ（将来の拡張用）"
+        }
+      ],
+      "email_notifications": [
+        {
+          "to": "subagent-reports@example.com",
+          "smtp_server": "smtp.gmail.com",
+          "smtp_port": 587,
+          "enabled": false,
+          "description": "サブエージェントレポートメール（将来の拡張用）"
+        }
+      ]
+    }
+  },
+  "settings": {
+    "log_level": "info",
+    "timeout": 30,
+    "retry_count": 3,
+    "retry_delay": 5,
+    "enable_threading": true,
+    "message_format": "markdown"
+  }
+}

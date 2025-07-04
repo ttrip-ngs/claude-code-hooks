@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "notification": {
+      "slack_notifications": [
+        {
+          "channel": "#general",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true
+        }
+      ]
+    },
+    "stop": {
+      "slack_notifications": [
+        {
+          "channel": "@your-username",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true
+        }
+      ]
+    },
+    "subagent_stop": {
+      "slack_notifications": [
+        {
+          "channel": "@your-username",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true
+        }
+      ]
+    }
+  }
+}

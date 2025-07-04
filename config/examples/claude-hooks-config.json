@@ -1,0 +1,86 @@
+{
+  "hooks": {
+    "notification": {
+      "slack_notifications": [
+        {
+          "channel": "#claude-notifications",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true,
+          "description": "一般的な通知チャンネル"
+        },
+        {
+          "channel": "@username",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true,
+          "description": "特定のユーザーへの直接メッセージ"
+        }
+      ],
+      "discord_notifications": [
+        {
+          "channel": "claude-notifications",
+          "webhook_url": "https://discord.com/api/webhooks/YOUR/WEBHOOK/URL",
+          "enabled": false,
+          "description": "Discordチャンネル（将来の拡張用）"
+        }
+      ]
+    },
+    "stop": {
+      "slack_notifications": [
+        {
+          "channel": "UJM1V2AAH",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true,
+          "description": "Takuya Takairaへの作業完了通知"
+        },
+        {
+          "channel": "#development-reports",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": false,
+          "description": "開発レポートチャンネル"
+        }
+      ]
+    },
+    "pre_tool_use": {
+      "slack_notifications": [
+        {
+          "channel": "#tool-monitoring",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": false,
+          "description": "ツール実行前の監視通知"
+        }
+      ]
+    },
+    "post_tool_use": {
+      "slack_notifications": [
+        {
+          "channel": "#tool-monitoring",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": false,
+          "description": "ツール実行後の監視通知"
+        }
+      ]
+    },
+    "subagent_stop": {
+      "slack_notifications": [
+        {
+          "channel": "UJM1V2AAH",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": true,
+          "description": "Takuya Takairaへのサブエージェント作業完了通知"
+        },
+        {
+          "channel": "#subagent-reports",
+          "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+          "enabled": false,
+          "description": "サブエージェントレポートチャンネル"
+        }
+      ]
+    }
+  },
+  "settings": {
+    "log_level": "info",
+    "timeout": 30,
+    "retry_count": 3,
+    "retry_delay": 5
+  }
+}
