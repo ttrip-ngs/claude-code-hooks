@@ -1,0 +1,27 @@
+# Claude Code Hooks Scripts .gitignore
+
+# 設定ファイル（機密情報含む）
+.env
+config/local.env
+
+# 旧形式の設定ファイル
+config.json
+.claude-hooks.json
+
+# ログファイル
+*.log
+
+# 一時ファイル
+*.tmp
+*.temp
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ設定
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

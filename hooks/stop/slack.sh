@@ -4,6 +4,7 @@
 # 作業完了通知に特化したメッセージ整形
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../../lib/config_loader.sh"
 source "$SCRIPT_DIR/../../lib/slack_messenger.sh"
 
 # 作業完了メッセージを作成

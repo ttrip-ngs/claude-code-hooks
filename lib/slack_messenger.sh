@@ -3,6 +3,10 @@
 # Slack通知の共通ライブラリ
 # 全Hook種別で使用される統一されたSlack送信機能
 
+# 設定読み込み
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config_loader.sh"
+
 # ログ出力関数
 log_info() {
     echo "[INFO] $(date '+%Y-%m-%d %H:%M:%S') $1" >&2
@@ -14,6 +18,10 @@ log_error() {
 
 # Slack通知の統一送信関数
 send_slack_message() {
+    # 設定が読み込まれていない場合は読み込む
+    if [[ -z "$SLACK_WEBHOOK_URL" ]]; then
+        load_config
+    fi
     local message_type="$1"     # notification, stop, subagent-stop, etc.
     local message="$2"          # メッセージ本文
     local channel="${3:-$SLACK_CHANNEL}"
