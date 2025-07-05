@@ -1,27 +1,133 @@
 # Claude Code Hooks Scripts .gitignore
 
-# 設定ファイル（機密情報含む）
+# === 機密情報ファイル ===
+# 環境設定
 .env
+.env.*
+!.env.example
 config/local.env
+config/production.env
+config/staging.env
 
-# 旧形式の設定ファイル
+# 設定ファイル
 config.json
+*-config.json
+test-config.json
 .claude-hooks.json
+slack-config.json
 
+# API キー・トークン
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+tokens.json
+
+# === 作業ファイル ===
 # ログファイル
 *.log
+logs/
+log/
 
 # 一時ファイル
 *.tmp
 *.temp
+*.bak
+*.backup
+*.orig
+*.old
+*~
 
-# OS固有ファイル
-.DS_Store
-Thumbs.db
-
-# エディタ設定
+# === IDE・エディタ ===
+# Visual Studio Code
 .vscode/
+*.code-workspace
+
+# IntelliJ IDEA
 .idea/
+*.iml
+*.iws
+
+# Vim
 *.swp
 *.swo
+.*.swp
+.*.swo
+
+# Emacs
 *~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# === OS固有 ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+
+# === 開発環境 ===
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+
+# === 証明書・鍵 ===
+# SSH
+id_rsa
+id_rsa.pub
+id_dsa
+id_dsa.pub
+id_ecdsa
+id_ecdsa.pub
+id_ed25519
+id_ed25519.pub
+
+# SSL/TLS
+*.crt
+*.cer
+*.csr
+*.der
+
+# === その他 ===
+# 圧縮ファイル
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# キャッシュ
+.cache/
+*.cache
+
+# テスト結果
+test-results/
+coverage/
+.nyc_output/
