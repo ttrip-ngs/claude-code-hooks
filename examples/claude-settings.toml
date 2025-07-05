@@ -1,0 +1,86 @@
+# Claude Code Hooks 設定例
+# ~/.claude/settings.toml に配置してください
+
+# Slack通知の基本設定例
+# 環境変数での設定:
+# export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+# export SLACK_CHANNEL="UJM1V2AAH"
+
+# ========================================
+# 基本的なSlack通知設定
+# ========================================
+
+# Stop Hook: 作業完了時の通知
+[[hooks]]
+event = "Stop"
+command = "/path/to/claude-code-hooks-scripts/hooks/stop/slack.sh"
+
+# Notification Hook: 各種通知
+[[hooks]]
+event = "Notification"
+command = "/path/to/claude-code-hooks-scripts/hooks/notification/slack.sh"
+
+# SubagentStop Hook: サブエージェント完了時の通知
+[[hooks]]
+event = "SubagentStop"
+command = "/path/to/claude-code-hooks-scripts/hooks/subagent-stop/slack.sh"
+
+# ========================================
+# 複数スクリプト組み合わせ例
+# ========================================
+
+# Stop Hook: 複数の処理を並列実行
+# [[hooks]]
+# event = "Stop"
+# command = "/path/to/claude-code-hooks-scripts/hooks/stop/slack.sh"
+# 
+# [[hooks]]
+# event = "Stop"
+# command = "/path/to/claude-code-hooks-scripts/hooks/stop/git-commit.sh"
+# 
+# [[hooks]]
+# event = "Stop"
+# command = "/path/to/claude-code-hooks-scripts/hooks/stop/cleanup.sh"
+# run_in_background = true
+
+# ========================================
+# 高度な設定例
+# ========================================
+
+# PreToolUse Hook: ツール実行前のチェック
+# [[hooks]]
+# event = "PreToolUse"
+# matcher = "Bash"
+# command = "/path/to/claude-code-hooks-scripts/hooks/pre-tool-use/security-check.sh"
+
+# PostToolUse Hook: ファイル編集後の自動フォーマット
+# [[hooks]]
+# event = "PostToolUse"
+# matcher = "Edit|Write|MultiEdit"
+# command = "/path/to/claude-code-hooks-scripts/hooks/post-tool-use/auto-format.sh"
+# run_in_background = true
+
+# PostToolUse Hook: テスト実行
+# [[hooks]]
+# event = "PostToolUse"
+# matcher = "Edit|Write|MultiEdit"
+# command = "/path/to/claude-code-hooks-scripts/hooks/post-tool-use/run-tests.sh"
+# run_in_background = true
+
+# ========================================
+# 条件付き実行例
+# ========================================
+
+# Python ファイル編集時のLint実行
+# [[hooks]]
+# event = "PostToolUse"
+# matcher = "Edit|Write|MultiEdit"
+# file_patterns = ["*.py"]
+# command = "/path/to/claude-code-hooks-scripts/hooks/post-tool-use/python-lint.sh"
+
+# JavaScript/TypeScript ファイル編集時のフォーマット
+# [[hooks]]
+# event = "PostToolUse"
+# matcher = "Edit|Write|MultiEdit"
+# file_patterns = ["*.js", "*.ts", "*.jsx", "*.tsx"]
+# command = "/path/to/claude-code-hooks-scripts/hooks/post-tool-use/js-format.sh"
