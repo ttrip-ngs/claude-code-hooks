@@ -42,7 +42,7 @@ Claude Code Hooks 2025年仕様変更に対応し、`SubagentStop`イベント�
 "subagent_stop": {
   "slack_notifications": [
     {
-      "channel": "UJM1V2AAH",
+      "channel": "YOUR_USER_ID",
       "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
       "enabled": true,
       "description": "サブエージェント完了通知"

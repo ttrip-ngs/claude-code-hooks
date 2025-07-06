@@ -65,8 +65,8 @@ export CLAUDE_HOOKS_ENV="development"  # または "production"
 ### 設定ファイル形式
 ```bash
 # .env (ディレクトリルートの設定ファイル)
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
-SLACK_CHANNEL="UJM1V2AAH"
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+SLACK_CHANNEL="YOUR_USER_ID"
 SLACK_ICON=":robot_face:"
 SLACK_USERNAME="Claude Code [DEV]"
 ENVIRONMENT="development"
@@ -129,7 +129,7 @@ main() {
 ### 開発環境用 (.env.development)
 ```bash
 # 開発環境設定
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/DEV/WEBHOOK/URL"
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/DEV/WEBHOOK/URL"
 SLACK_CHANNEL="#development-alerts"
 SLACK_USERNAME="Claude Code [DEV]"
 SLACK_ICON=":construction:"
@@ -140,8 +140,8 @@ LOG_LEVEL="debug"
 ### 本番環境用 (.env.production)
 ```bash
 # 本番環境設定
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/PROD/WEBHOOK/URL"
-SLACK_CHANNEL="UJM1V2AAH"
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/PROD/WEBHOOK/URL"
+SLACK_CHANNEL="YOUR_USER_ID"
 SLACK_USERNAME="Claude Code"
 SLACK_ICON=":robot_face:"
 ENVIRONMENT="production"

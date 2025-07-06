@@ -169,14 +169,14 @@ cd ~/prod/claude-code-hooks-scripts
 ```toml
 [[hooks]]
 event = "Stop"
-command = "/home/takuyatakaira/dev/claude-code-hocks/hooks/stop/slack.sh"
+command = "/home/your-username/dev/claude-code-hocks/hooks/stop/slack.sh"
 ```
 
 **本番環境用**:
 ```toml
 [[hooks]]
 event = "Stop"
-command = "/home/takuyatakaira/prod/claude-code-hooks-scripts/hooks/stop/slack.sh"
+command = "/home/your-username/prod/claude-code-hooks-scripts/hooks/stop/slack.sh"
 ```
 
 ## 🔒 セキュリティ実装

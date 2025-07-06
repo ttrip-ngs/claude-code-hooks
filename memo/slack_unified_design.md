@@ -369,7 +369,7 @@ main "$@"
 ```bash
 # 基本設定
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
-export SLACK_CHANNEL="UJM1V2AAH"
+export SLACK_CHANNEL="YOUR_USER_ID"
 
 # オプション設定（省略可能）
 export SLACK_ICON=":robot_face:"

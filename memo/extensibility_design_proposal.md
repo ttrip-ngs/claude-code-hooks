@@ -28,7 +28,7 @@
           "enabled": true,
           "config": {
             "channel": "#alerts",
-            "webhook_url": "https://hooks.slack.com/services/...",
+            "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
             "icon_emoji": ":warning:"
           }
         },
@@ -69,8 +69,8 @@
           "type": "slack",
           "enabled": true,
           "config": {
-            "channel": "UJM1V2AAH",
-            "webhook_url": "https://hooks.slack.com/services/..."
+            "channel": "YOUR_USER_ID",
+            "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
           }
         },
         {

@@ -93,8 +93,8 @@ command = "/path/to/claude-code-hooks-scripts/hooks/post-tool-use/auto_format.sh
 ### 個別スクリプトの設定
 ```bash
 # 環境変数による設定（各スクリプト独立）
-export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
-export SLACK_CHANNEL="UJM1V2AAH"
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+export SLACK_CHANNEL="YOUR_USER_ID"
 
 # 直接実行も可能
 ./hooks/stop/slack_completion.sh "作業完了"
@@ -143,8 +143,8 @@ get_session_info() { echo "$CLAUDE_SESSION_ID"; }
 ### 3. 設定の分離
 ```bash
 # config/slack-config.env
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
-SLACK_DEFAULT_CHANNEL="UJM1V2AAH"
+SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+SLACK_DEFAULT_CHANNEL="YOUR_USER_ID"
 SLACK_USERNAME="Claude Code"
 SLACK_ICON=":robot_face:"
 ```
