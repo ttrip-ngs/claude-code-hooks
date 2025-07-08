@@ -101,17 +101,10 @@ claude-code-hooks/
 
 このプロジェクトはMITライセンスの下で公開されています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
 
-## 謝辞
-
-- [Anthropic](https://www.anthropic.com/) - Claude Codeの開発
-- Slackコミュニティ - フィードバックとサポート
-- すべての貢献者の皆様
-
 ## サポート
 
 - バグ報告: [Issues](https://github.com/ttrip-ngs/claude-code-hooks/issues)
 - 質問・議論: [Discussions](https://github.com/ttrip-ngs/claude-code-hooks/discussions)
-- メール: support@example.com
 
 ---
 
