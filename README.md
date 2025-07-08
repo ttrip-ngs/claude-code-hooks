@@ -1,19 +1,19 @@
-# 🔔 Claude Code Hooks
+# Claude Code Hooks
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ttrip-ngs/claude-code-hooks/pulls)
 
 Claude Code（Anthropic社のCLIツール）の作業イベントをフックし、Slack通知を自動送信するシステムです。開発者の作業状況をリアルタイムで把握し、チーム内のコミュニケーションを円滑にします。
 
-## ✨ 特徴
+## 特徴
 
-- 🚀 **5分でセットアップ完了** - シンプルな設定で即座に利用開始
-- 📢 **リアルタイム通知** - Claude Codeの作業状況を即座にSlackへ通知
-- 🔐 **セキュリティ重視** - 機密情報検出・漏洩防止機能を標準搭載
-- 🌍 **環境自動判別** - 開発・本番環境を自動で切り替え
-- 🛠️ **カスタマイズ可能** - 柔軟な設定でチームのニーズに対応
+- **5分でセットアップ完了** - シンプルな設定で即座に利用開始
+- **リアルタイム通知** - Claude Codeの作業状況を即座にSlackへ通知
+- **セキュリティ重視** - 機密情報検出・漏洩防止機能を標準搭載
+- **環境自動判別** - 開発・本番環境を自動で切り替え
+- **カスタマイズ可能** - 柔軟な設定でチームのニーズに対応
 
-## 📋 必要条件
+## 必要条件
 
 - Bash 4.0以上
 - Git
@@ -22,7 +22,7 @@ Claude Code（Anthropic社のCLIツール）の作業イベントをフックし
 - Claude Code（インストール済み）
 - Slack Webhook URL
 
-## 🚀 クイックスタート
+## クイックスタート
 
 ```bash
 # 1. リポジトリをクローン
@@ -42,12 +42,12 @@ subagent-stop = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
 EOF
 
 # 4. テスト通知を送信
-./hooks/notification/slack.sh info "セットアップ完了！🎉"
+./hooks/notification/slack.sh info "セットアップ完了！"
 ```
 
 詳細な手順は [QUICK_START.md](QUICK_START.md) を参照してください。
 
-## 📁 プロジェクト構造
+## プロジェクト構造
 
 ```
 claude-code-hooks/
@@ -63,7 +63,7 @@ claude-code-hooks/
 └── examples/          # サンプルコード
 ```
 
-## 🔧 主な機能
+## 主な機能
 
 ### 1. イベント通知
 - **作業完了通知**: Claude Codeの作業終了時に自動通知
@@ -80,14 +80,14 @@ claude-code-hooks/
 - **メッセージ形式**: カスタムメッセージテンプレート
 - **フィルタリング**: 通知条件の詳細設定
 
-## 📖 ドキュメント
+## ドキュメント
 
 - [詳細セットアップガイド](docs/setup.md)
 - [設定リファレンス](docs/configuration.md)
 - [トラブルシューティング](docs/troubleshooting.md)
 - [貢献ガイドライン](CONTRIBUTING.md)
 
-## 🤝 貢献
+## 貢献
 
 プルリクエストを歓迎します！以下の手順で貢献してください：
 
@@ -97,22 +97,22 @@ claude-code-hooks/
 4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
 5. プルリクエストを作成
 
-## 📝 ライセンス
+## ライセンス
 
 このプロジェクトはMITライセンスの下で公開されています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
 
-## 🙏 謝辞
+## 謝辞
 
 - [Anthropic](https://www.anthropic.com/) - Claude Codeの開発
 - Slackコミュニティ - フィードバックとサポート
 - すべての貢献者の皆様
 
-## 📞 サポート
+## サポート
 
-- 🐛 バグ報告: [Issues](https://github.com/ttrip-ngs/claude-code-hooks/issues)
-- 💬 質問・議論: [Discussions](https://github.com/ttrip-ngs/claude-code-hooks/discussions)
-- 📧 メール: support@example.com
+- バグ報告: [Issues](https://github.com/ttrip-ngs/claude-code-hooks/issues)
+- 質問・議論: [Discussions](https://github.com/ttrip-ngs/claude-code-hooks/discussions)
+- メール: support@example.com
 
 ---
 
-Made with ❤️ by [ttrip-ngs](https://github.com/ttrip-ngs)
+Created by [ttrip-ngs](https://github.com/ttrip-ngs)
