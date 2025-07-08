@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Claude Code Hooks Scripts - 機密情報検出スクリプト
-# 
+#
 # 使用方法:
 #   ./scripts/security_scan.sh           # 全ファイルスキャン
 #   ./scripts/security_scan.sh --git     # Git追跡ファイルのみ
 #   ./scripts/security_scan.sh --strict  # 厳格モード
 
-set -e
+set -euo pipefail
 
 # スクリプトのディレクトリを取得
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -95,25 +95,25 @@ parse_arguments() {
 define_patterns() {
     # 高リスクパターン（確実に機密情報）
     HIGH_RISK_PATTERNS=(
-        # Slack Webhook URL
-        "hooks\.slack\.com/services/[A-Z0-9]+/[A-Z0-9]+/[A-Za-z0-9_-]+"
-        
+        # Slack Webhook URL (YOURというプレースホルダーを除外)
+        "hooks\.slack\.com/services/(?!YOUR)[A-Z0-9]+/[A-Z0-9]+/[A-Za-z0-9_-]+"
+
         # JWT トークン
         "eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+"
-        
+
         # API キー（汎用）
         "['\"][a-zA-Z0-9_-]{32,}['\"]"
-        
+
         # Stripe API キー
         "sk_live_[0-9a-zA-Z]{24}"
         "pk_live_[0-9a-zA-Z]{24}"
-        
+
         # Google API キー
         "AIza[0-9A-Za-z\\-_]{35}"
-        
+
         # AWS アクセスキー
         "AKIA[0-9A-Z]{16}"
-        
+
         # GitHub トークン
         "ghp_[A-Za-z0-9]{36}"
         "gho_[A-Za-z0-9]{36}"
@@ -121,30 +121,30 @@ define_patterns() {
         "ghs_[A-Za-z0-9]{36}"
         "ghr_[A-Za-z0-9]{36}"
     )
-    
+
     # 中リスクパターン（文脈により機密情報の可能性）
     MEDIUM_RISK_PATTERNS=(
         # 長い英数字文字列（32文字以上）
         "[a-zA-Z0-9]{32,}"
-        
+
         # BASE64エンコード（長いもの）
         "[A-Za-z0-9+/]{40,}={0,2}"
-        
+
         # 16進数文字列（長いもの）
         "[a-fA-F0-9]{32,}"
-        
+
         # パスワード的な文字列
         "(password|passwd|pwd|secret|key|token)['\"]?\s*[:=]\s*['\"][^'\"]{8,}['\"]"
     )
-    
+
     # 厳格モードでのみチェックするパターン
     STRICT_PATTERNS=(
         # Slack ID パターン
         "[DUBCTW][A-Z0-9]{8,}"
-        
+
         # UUID
         "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
-        
+
         # IP アドレス（プライベート範囲）
         "192\.168\.[0-9]{1,3}\.[0-9]{1,3}"
         "10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
@@ -175,38 +175,38 @@ scan_file_for_patterns() {
     local file="$1"
     local patterns=("${@:2}")
     local found_count=0
-    
+
     # ファイルが読み取り可能かチェック
     if [[ ! -r "$file" ]]; then
         [[ "$VERBOSE" == true ]] && log_warn "読み取り不可: $file"
         return 0
     fi
-    
+
     # バイナリファイルをスキップ
     if file "$file" | grep -q "binary"; then
         [[ "$VERBOSE" == true ]] && log_info "バイナリファイルをスキップ: $file"
         return 0
     fi
-    
+
     # 各パターンでチェック
     for pattern in "${patterns[@]}"; do
         if [[ "$VERBOSE" == true ]]; then
             log_info "パターンチェック: $pattern in $file"
         fi
-        
+
         local matches
         matches=$(rg -n "$pattern" "$file" 2>/dev/null || true)
-        
+
         if [[ -n "$matches" ]]; then
             log_found "機密情報の可能性 in $file:"
             echo "$matches" | while IFS= read -r line; do
                 log_found "  $line"
             done
             echo ""
-            ((found_count++))
+            ((found_count++)) || true
         fi
     done
-    
+
     return $found_count
 }
 
@@ -214,64 +214,67 @@ scan_file_for_patterns() {
 main_scan() {
     log_info "🔍 機密情報スキャンを開始します"
     log_info "プロジェクトルート: $PROJECT_ROOT"
-    
+
     if [[ "$STRICT_MODE" == true ]]; then
         log_info "厳格モードが有効です"
     fi
-    
+
     define_patterns
-    
+
     local total_files=0
     local total_issues=0
     local high_risk_issues=0
     local medium_risk_issues=0
     local strict_issues=0
-    
+
     # ファイル一覧を取得
     local file_list
     file_list=$(get_file_list)
-    
+
     if [[ -z "$file_list" ]]; then
         log_warn "スキャン対象ファイルが見つかりませんでした"
         return 0
     fi
-    
+
     # 高リスクパターンのスキャン
     log_info "🚨 高リスクパターンをスキャン中..."
     while IFS= read -r file; do
         [[ -z "$file" ]] && continue
-        ((total_files++))
-        
-        if scan_file_for_patterns "$file" "${HIGH_RISK_PATTERNS[@]}"; then
-            ((high_risk_issues += $?))
-        fi
+        ((total_files++)) || true
+
+        local result
+        scan_file_for_patterns "$file" "${HIGH_RISK_PATTERNS[@]}"
+        result=$?
+        ((high_risk_issues += result)) || true
     done <<< "$file_list"
-    
+
     # 中リスクパターンのスキャン
     log_info "⚠️  中リスクパターンをスキャン中..."
     while IFS= read -r file; do
         [[ -z "$file" ]] && continue
-        
-        if scan_file_for_patterns "$file" "${MEDIUM_RISK_PATTERNS[@]}"; then
-            ((medium_risk_issues += $?))
-        fi
+
+        local result
+        scan_file_for_patterns "$file" "${MEDIUM_RISK_PATTERNS[@]}"
+        result=$?
+        ((medium_risk_issues += result)) || true
     done <<< "$file_list"
-    
+
     # 厳格モードでの追加スキャン
     if [[ "$STRICT_MODE" == true ]]; then
         log_info "🔍 厳格モードパターンをスキャン中..."
         while IFS= read -r file; do
             [[ -z "$file" ]] && continue
-            
-            if scan_file_for_patterns "$file" "${STRICT_PATTERNS[@]}"; then
-                ((strict_issues += $?))
-            fi
+
+            local result
+            scan_file_for_patterns "$file" "${STRICT_PATTERNS[@]}"
+            result=$?
+            ((strict_issues += result)) || true
         done <<< "$file_list"
     fi
-    
+
     # 結果サマリー
     total_issues=$((high_risk_issues + medium_risk_issues + strict_issues))
-    
+
     echo ""
     echo "========================================"
     echo "スキャン結果サマリー"
@@ -284,19 +287,19 @@ main_scan() {
     fi
     echo "合計検出項目: $total_issues"
     echo "========================================"
-    
+
     # 終了判定
     if [[ $total_issues -gt 0 ]]; then
         if [[ $high_risk_issues -gt 0 ]]; then
             log_error "🚨 高リスクの機密情報が検出されました！"
             log_error "即座に対応が必要です。"
         fi
-        
+
         if [[ $medium_risk_issues -gt 0 ]]; then
             log_warn "⚠️  中リスクの機密情報が検出されました。"
             log_warn "確認と対応を検討してください。"
         fi
-        
+
         if [[ "$EXIT_ON_FOUND" == true ]]; then
             exit 1
         fi
@@ -308,13 +311,13 @@ main_scan() {
 # 必要ツールのチェック
 check_dependencies() {
     local missing_tools=()
-    
+
     for tool in rg file; do
         if ! command -v "$tool" &> /dev/null; then
             missing_tools+=("$tool")
         fi
     done
-    
+
     if [[ ${#missing_tools[@]} -gt 0 ]]; then
         log_error "必要なツールが見つかりません: ${missing_tools[*]}"
         log_error "以下でインストールしてください:"
@@ -328,7 +331,7 @@ check_dependencies() {
 main() {
     parse_arguments "$@"
     check_dependencies
-    
+
     cd "$PROJECT_ROOT"
     main_scan
 }
