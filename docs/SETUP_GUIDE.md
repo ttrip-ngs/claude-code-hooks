@@ -1,6 +1,8 @@
-# Claude Code Hooks 登録手順
+# Claude Code Hooks セットアップガイド
 
-## 📋 前提条件
+Claude Code Hooksのスクリプト集をセットアップする詳細な手順です。
+
+## 前提条件
 
 ### 1. 必要なソフトウェア
 - **Claude Code**: 最新版がインストールされていること
@@ -13,18 +15,18 @@
 2. 「アプリ」→「Incoming Webhooks」を選択
 3. 新しいWebhookを作成してURLをコピー
 
-## 🚀 Step 1: プロジェクトのダウンロード
+## Step 1: プロジェクトのダウンロード
 
 ```bash
 # プロジェクトをクローン
-git clone <repository-url> claude-code-hooks-scripts
-cd claude-code-hooks-scripts
+git clone https://github.com/ttrip-ngs/claude-code-hooks.git
+cd claude-code-hooks
 
 # または既存のプロジェクトディレクトリに移動
-cd /path/to/claude-code-hocks
+cd /path/to/claude-code-hooks
 ```
 
-## ⚙️ Step 2: 環境変数の設定
+## Step 2: 環境変数の設定
 
 ### 方法A: 環境設定スクリプトを使用（推奨）
 ```bash
@@ -34,15 +36,15 @@ source examples/environment-setup.sh
 # Slack Webhook URLを設定（必須）
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 
-# チャンネルを設定（デフォルト: UJM1V2AAH）
-export SLACK_CHANNEL="UJM1V2AAH"  # または "#your-channel"
+# チャンネルを設定
+export SLACK_CHANNEL="#your-channel"
 ```
 
 ### 方法B: 手動設定
 ```bash
 # 必須設定
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
-export SLACK_CHANNEL="UJM1V2AAH"
+export SLACK_CHANNEL="#your-channel"
 
 # オプション設定
 export SLACK_ICON=":robot_face:"
@@ -53,11 +55,11 @@ export SLACK_USERNAME="Claude Code"
 ```bash
 # ~/.bashrc または ~/.zshrc に追加
 echo 'export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"' >> ~/.bashrc
-echo 'export SLACK_CHANNEL="UJM1V2AAH"' >> ~/.bashrc
+echo 'export SLACK_CHANNEL="#your-channel"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-## 🔧 Step 3: Claude Code設定ファイルの作成
+## Step 3: Claude Code設定ファイルの作成
 
 ### 設定ファイルの場所
 ```bash
@@ -104,7 +106,7 @@ event = "SubagentStop"
 command = "/home/takuyatakaira/Dev/claude-code-hocks/hooks/subagent-stop/slack.sh"
 ```
 
-## 🧪 Step 4: テスト実行
+## Step 4: テスト実行
 
 ### 1. 依存関係チェック
 ```bash
@@ -130,7 +132,7 @@ source examples/environment-setup.sh
 claude-code --help  # 何らかのコマンドを実行してHookをトリガー
 ```
 
-## 📱 Step 5: 設定の確認
+## Step 5: 設定の確認
 
 ### 1. 設定ファイルの構文チェック
 ```bash
@@ -156,7 +158,7 @@ echo "SLACK_USERNAME: ${SLACK_USERNAME:-(未設定)}"
 ls -la hooks/*/slack.sh
 ```
 
-## 🔄 Step 6: 実際のClaude Code使用
+## Step 6: 実際のClaude Code使用
 
 ### 1. 通常の作業でテスト
 ```bash
@@ -170,7 +172,7 @@ claude-code "簡単なテストファイルを作成してください"
 - **Stop Hook**: Claude Codeのセッションが終了した時
 - **SubagentStop Hook**: Task toolが実行された時
 
-## 🎛️ 高度な設定（オプション）
+## 高度な設定（オプション）
 
 ### 複数スクリプトの登録
 ```toml
@@ -194,7 +196,7 @@ matcher = "Edit|Write|MultiEdit"
 command = "/path/to/claude-code-hocks/hooks/post-tool-use/auto-format.sh"
 ```
 
-## 🛠️ トラブルシューティング
+## トラブルシューティング
 
 ### よくある問題と解決方法
 
@@ -238,17 +240,17 @@ claude-code --version
 # 設定の再読み込み（Claude Codeを再起動）
 ```
 
-## ✅ 設定完了の確認
+## 設定完了の確認
 
 以下がすべて確認できれば設定完了です：
 
-1. ✅ 環境変数が設定されている
-2. ✅ スクリプトが実行可能
-3. ✅ Claude Code設定ファイルが正しい
-4. ✅ 個別テストでSlack通知が送信される
-5. ✅ Claude Code実行時にHookが動作する
+1. 環境変数が設定されている
+2. スクリプトが実行可能
+3. Claude Code設定ファイルが正しい
+4. 個別テストでSlack通知が送信される
+5. Claude Code実行時にHookが動作する
 
-## 🚀 次のステップ
+## 次のステップ
 
 設定が完了したら、以下のように活用できます：
 
@@ -257,4 +259,4 @@ claude-code --version
 - **進捗追跡**: SubagentStop Hookでタスク完了追跡
 - **複数スクリプト**: Claude Code側で複数処理を組み合わせ
 
-Claude Code Hooks Scriptsをお楽しみください！ 🎉
+他のフックスクリプトも追加される予定です。[README.md](../README.md)で最新情報をご確認ください。
