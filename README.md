@@ -45,7 +45,7 @@ EOF
 ./hooks/notification/slack.sh info "セットアップ完了！"
 ```
 
-詳細な手順は [QUICK_START.md](QUICK_START.md) を参照してください。
+詳細な手順は [QUICK_START.md](docs/QUICK_START.md) を参照してください。
 
 ## プロジェクト構造
 
@@ -82,10 +82,9 @@ claude-code-hooks/
 
 ## ドキュメント
 
-- [詳細セットアップガイド](docs/setup.md)
-- [設定リファレンス](docs/configuration.md)
-- [トラブルシューティング](docs/troubleshooting.md)
-- [貢献ガイドライン](CONTRIBUTING.md)
+- [クイックスタート](docs/QUICK_START.md)
+- [詳細セットアップガイド](docs/SETUP_GUIDE.md)
+- [設定リファレンス](docs/setup.md)
 
 ## 貢献
 
