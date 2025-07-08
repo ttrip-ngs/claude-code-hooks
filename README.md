@@ -29,10 +29,14 @@ Claude Code（Anthropic社のCLIツール）の作業イベントをフックし
 git clone https://github.com/ttrip-ngs/claude-code-hooks.git
 cd claude-code-hooks
 
-# 2. Slack Webhook URLを設定
-export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+# 2. 環境設定ファイルを作成
+cp .env.example .env
+# .envファイルを編集してSLACK_WEBHOOK_URLに実際のURLを設定
 
-# 3. Claude Code設定ファイルを作成
+# 3. 環境変数を読み込み
+source .env
+
+# 4. Claude Code設定ファイルを作成
 mkdir -p ~/.claude
 cat > ~/.claude/settings.toml << 'EOF'
 [hooks]
@@ -41,7 +45,7 @@ notification = "/path/to/claude-code-hooks/hooks/notification/slack.sh"
 subagent-stop = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
 EOF
 
-# 4. テスト通知を送信
+# 5. テスト通知を送信
 ./hooks/notification/slack.sh info "セットアップ完了！"
 ```
 

@@ -12,14 +12,18 @@ cd /home/takuyatakaira/Dev/claude-code-hocks
 source examples/environment-setup.sh
 ```
 
-## 🔐 2. Slack設定（2分）
+## 🔐 2. 環境設定（2分）
 
 ```bash
-# Slack Webhook URL を設定（必須）
-export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+# 環境設定ファイルを作成
+cp .env.example .env
 
-# 送信先チャンネル設定
-export SLACK_CHANNEL="UJM1V2AAH"  # Takuya TakairaのDM
+# .envファイルを編集（エディタで開いて実際の値を設定）
+# SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/ACTUAL/WEBHOOK/URL"
+# SLACK_CHANNEL="#your-channel"
+
+# 環境変数を読み込み
+source .env
 ```
 
 ## ⚙️ 3. Claude Code設定（1分）
