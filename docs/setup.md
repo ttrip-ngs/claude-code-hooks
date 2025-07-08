@@ -1,184 +1,219 @@
-# Claude Code Hooks Scripts セットアップガイド
+# Claude Code Hooks 設定リファレンス
 
-## 概要
-Claude Code Hooks Scriptsを使用してSlack通知機能を設定する手順を説明します。
+Claude Code Hooksのスクリプト集に含まれる各種設定オプションの詳細を説明します。
 
-## 前提条件
-- `jq` コマンドがインストールされていること
-- `curl` コマンドがインストールされていること
-- SlackのWebhook URLが取得済みであること
+## 環境変数
 
-### 必要パッケージのインストール
+Slack通知スクリプトで使用される環境変数：
+
+### 必須設定
+
+| 環境変数 | 説明 | 例 |
+|---------|------|-----|
+| `SLACK_WEBHOOK_URL` | Slack Incoming Webhook URL | `https://hooks.slack.com/services/YOUR/WEBHOOK/URL` |
+
+### オプション設定
+
+| 環境変数 | 説明 | デフォルト値 |
+|---------|------|-------------|
+| `SLACK_CHANNEL` | 通知先チャンネル | Webhook設定のデフォルト |
+| `SLACK_USERNAME` | Bot表示名 | `Claude Code` |
+| `SLACK_ICON` | Botアイコン | `:robot_face:` |
+| `SLACK_MENTION_USER` | メンション対象 | なし |
+| `SLACK_COLOR_SUCCESS` | 成功時の色 | `good` (緑) |
+| `SLACK_COLOR_ERROR` | エラー時の色 | `danger` (赤) |
+| `SLACK_COLOR_INFO` | 情報時の色 | `#3AA3E3` (青) |
+
+## 環境変数の設定方法
+
+### 1. 一時的な設定（現在のセッションのみ）
+
 ```bash
-# Ubuntu/Debian
-sudo apt-get update
-sudo apt-get install jq curl
-
-# macOS (Homebrew)
-brew install jq curl
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+export SLACK_CHANNEL="#dev-notifications"
 ```
 
-## セットアップ手順
+### 2. .envファイルを使用（推奨）
 
-### 1. 自動セットアップ（推奨）
 ```bash
-cd /path/to/claude-code-hooks-scripts
-./config/setup.sh
+# .envファイルを作成
+cp .env.example .env
+
+# .envファイルを編集
+nano .env
+
+# 環境変数を読み込み
+source .env
 ```
 
-セットアップスクリプトが以下を自動実行します：
-- 設定ディレクトリの作成 (`$HOME/.config/claude-code-hooks-scripts/`)
-- 設定ファイル例の選択とコピー
-- 適切な権限設定
+### 3. 永続的な設定（シェル設定ファイル）
 
-### 2. 手動セットアップ
 ```bash
-# 設定ディレクトリの作成
-mkdir -p "$HOME/.config/claude-code-hooks-scripts"
+# ~/.bashrcまたは~/.zshrcに追加
+echo 'export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"' >> ~/.bashrc
+echo 'export SLACK_CHANNEL="#dev-notifications"' >> ~/.bashrc
 
-# 設定ファイルをコピー
-cp config/examples/minimal-config.json "$HOME/.config/claude-code-hooks-scripts/config.json"
-
-# 権限設定
-chmod 600 "$HOME/.config/claude-code-hooks-scripts/config.json"
+# 設定を再読み込み
+source ~/.bashrc
 ```
 
-## 設定ファイルの編集
+## Claude Code設定ファイル
 
-### 基本設定
-```bash
-nano "$HOME/.config/claude-code-hooks-scripts/config.json"
+### settings.toml形式
+
+`~/.claude/settings.toml`に以下の形式で設定：
+
+```toml
+# フックイベントごとの設定
+[[hooks]]
+event = "Stop"
+command = "/path/to/claude-code-hooks/hooks/stop/slack.sh"
+
+[[hooks]]
+event = "Notification"
+command = "/path/to/claude-code-hooks/hooks/notification/slack.sh"
+
+[[hooks]]
+event = "SubagentStop"
+command = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+
+# 条件付き実行の例
+[[hooks]]
+event = "PostToolUse"
+matcher = "Edit|Write"
+command = "/path/to/custom-hook.sh"
+
+# バックグラウンド実行の例
+[[hooks]]
+event = "Stop"
+command = "/path/to/background-task.sh"
+run_in_background = true
 ```
 
-以下の部分を実際の値に変更：
-```json
+### 利用可能なイベント
+
+| イベント | 説明 |
+|---------|------|
+| `Stop` | Claude Codeセッション終了時 |
+| `Notification` | 通知イベント発生時 |
+| `SubagentStop` | サブエージェント（Task tool）終了時 |
+| `PreToolUse` | ツール使用前 |
+| `PostToolUse` | ツール使用後 |
+
+## セキュリティベストプラクティス
+
+### 1. 機密情報の管理
+
+- Webhook URLは環境変数または.envファイルで管理
+- .envファイルは必ず.gitignoreに追加
+- 設定ファイルの権限を制限：
+
+```bash
+chmod 600 .env
+chmod 600 ~/.claude/settings.toml
+```
+
+### 2. Git管理から除外
+
+`.gitignore`に以下を追加：
+
+```
+.env
+.env.local
+*.webhook
+config/local/*
+```
+
+### 3. 環境別設定
+
+開発環境と本番環境で異なる設定を使用：
+
+```bash
+# 開発環境
+source config/development.env
+
+# 本番環境
+source config/production.env
+```
+
+## カスタマイズ例
+
+### 1. 複数チャンネルへの通知
+
+環境変数で複数の通知先を設定：
+
+```bash
+# エラー通知用
+export SLACK_ERROR_CHANNEL="#errors"
+export SLACK_ERROR_WEBHOOK_URL="https://hooks.slack.com/services/ERROR/WEBHOOK"
+
+# 進捗通知用
+export SLACK_PROGRESS_CHANNEL="#progress"
+export SLACK_PROGRESS_WEBHOOK_URL="https://hooks.slack.com/services/PROGRESS/WEBHOOK"
+```
+
+### 2. 条件付き通知
+
+スクリプト内で条件分岐を実装：
+
+```bash
+# 作業時間が長い場合のみ通知
+if [ $DURATION -gt 300 ]; then
+    send_slack_notification "長時間作業が完了しました"
+fi
+```
+
+### 3. カスタムフォーマット
+
+Slack通知のフォーマットをカスタマイズ：
+
+```bash
+# リッチなメッセージフォーマット
 {
-  "hooks": {
-    "notification": {
-      "slack_notifications": [
-        {
-          "channel": "#your-channel",
-          "webhook_url": "https://hooks.slack.com/services/YOUR/ACTUAL/WEBHOOK_URL",
-          "enabled": true
-        }
-      ]
-    },
-    "stop": {
-      "slack_notifications": [
-        {
-          "channel": "@your-username",
-          "webhook_url": "https://hooks.slack.com/services/YOUR/ACTUAL/WEBHOOK_URL",
-          "enabled": true
-        }
-      ]
-    },
-    "subagent_stop": {
-      "slack_notifications": [
-        {
-          "channel": "@your-username",
-          "webhook_url": "https://hooks.slack.com/services/YOUR/ACTUAL/WEBHOOK_URL",
-          "enabled": true
-        }
-      ]
-    }
-  }
-}
-```
-
-### Webhook URLの取得方法
-1. Slackワークスペースの管理画面にアクセス
-2. 「アプリ」→「Incoming Webhooks」を選択
-3. 新しいWebhookを作成し、URLをコピー
-
-## テスト実行
-
-### 設定テスト
-```bash
-cd /path/to/claude-code-hooks-scripts
-export CLAUDE_HOOKS_CONFIG="$HOME/.config/claude-code-hooks-scripts/config.json"
-./test_notifications.sh
-```
-
-### 個別テスト
-```bash
-# Notification Hook
-./hooks/notification/slack_notify.sh "info" "テストメッセージ"
-
-# Stop Hook  
-./hooks/stop/slack_notify.sh "テスト作業" "テスト結果"
-
-# SubagentStop Hook
-./hooks/subagent-stop/slack_notify.sh "テストタスク" "サブエージェントテスト結果"
-```
-
-## Claude Codeでの設定
-
-### hooksの有効化
-Claude Codeの設定ファイルでhooksを指定：
-
-```json
-{
-  "hooks": {
-    "notification": "/path/to/claude-code-hooks-scripts/hooks/notification/slack_notify.sh",
-    "stop": "/path/to/claude-code-hooks-scripts/hooks/stop/slack_notify.sh",
-    "subagent_stop": "/path/to/claude-code-hooks-scripts/hooks/subagent-stop/slack_notify.sh"
-  }
+    "attachments": [{
+        "color": "good",
+        "title": "作業完了",
+        "fields": [
+            {"title": "タスク", "value": "$TASK_NAME", "short": true},
+            {"title": "実行時間", "value": "$DURATION", "short": true}
+        ],
+        "footer": "Claude Code Hooks",
+        "ts": $(date +%s)
+    }]
 }
 ```
 
 ## トラブルシューティング
 
-### よくある問題
+### 環境変数が認識されない
 
-#### 1. 設定ファイルが見つからない
 ```bash
-ls -la "$HOME/.config/claude-code-hooks-scripts/config.json"
-```
-ファイルが存在しない場合はセットアップを再実行してください。
+# 環境変数の確認
+echo $SLACK_WEBHOOK_URL
 
-#### 2. 権限エラー
-```bash
-chmod 600 "$HOME/.config/claude-code-hooks-scripts/config.json"
+# 環境変数の再読み込み
+source .env
 ```
 
-#### 3. jqコマンドエラー
+### 権限エラー
+
 ```bash
-# 設定ファイルの構文チェック
-jq '.' "$HOME/.config/claude-code-hooks-scripts/config.json"
+# スクリプトに実行権限を付与
+chmod +x hooks/**/*.sh
 ```
 
-#### 4. Webhook URLの検証
-```bash
-# 設定確認
-jq '.hooks.notification.slack_notifications[0].webhook_url' "$HOME/.config/claude-code-hooks-scripts/config.json"
+### Webhook URLの検証
 
-# 手動テスト
+```bash
+# curlで直接テスト
 curl -X POST -H 'Content-type: application/json' \
   --data '{"text":"テストメッセージ"}' \
-  YOUR_WEBHOOK_URL
+  "$SLACK_WEBHOOK_URL"
 ```
 
-## 設定ファイルの場所
+## 関連ドキュメント
 
-### デフォルトパス
-- **設定ファイル**: `$HOME/.config/claude-code-hooks-scripts/config.json`
-- **設定ディレクトリ**: `$HOME/.config/claude-code-hooks-scripts/`
-
-### カスタムパス
-環境変数で設定ファイルパスをカスタマイズ可能：
-```bash
-export CLAUDE_HOOKS_CONFIG="/custom/path/to/config.json"
-```
-
-### XDG Base Directory対応
-`XDG_CONFIG_HOME` 環境変数も考慮されます：
-```bash
-export XDG_CONFIG_HOME="/custom/config/dir"
-# 設定ファイルパス: /custom/config/dir/claude-code-hooks-scripts/config.json
-```
-
-## セキュリティ注意事項
-
-1. **設定ファイルの権限**: 600 (所有者のみ読み書き可能)
-2. **Webhook URLの管理**: GitやDockerイメージに含めない
-3. **ログファイル**: Webhook URLがログに出力されないよう注意
+- [README](../README.md) - プロジェクト概要
+- [QUICK_START.md](QUICK_START.md) - クイックスタートガイド
+- [SETUP_GUIDE.md](SETUP_GUIDE.md) - 詳細セットアップガイド
+- [slack-notification-setup.md](slack-notification-setup.md) - Slack通知専用ガイド

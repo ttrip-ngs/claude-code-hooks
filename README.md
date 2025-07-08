@@ -3,15 +3,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ttrip-ngs/claude-code-hooks/pulls)
 
-Claude Code（Anthropic社のCLIツール）の作業イベントをフックし、Slack通知を自動送信するシステムです。開発者の作業状況をリアルタイムで把握し、チーム内のコミュニケーションを円滑にします。
+Claude Code（Anthropic社のCLIツール）のフック機能を活用した便利なスクリプト集です。作業効率化とチーム連携を支援する様々なフックスクリプトを提供します。
 
-## 特徴
+## 概要
 
-- **5分でセットアップ完了** - シンプルな設定で即座に利用開始
-- **リアルタイム通知** - Claude Codeの作業状況を即座にSlackへ通知
-- **セキュリティ重視** - 機密情報検出・漏洩防止機能を標準搭載
-- **環境自動判別** - 開発・本番環境を自動で切り替え
-- **カスタマイズ可能** - 柔軟な設定でチームのニーズに対応
+Claude Code Hooksは、Claude Codeのイベントフック機能を利用して、開発ワークフローを自動化・拡張するためのスクリプト集です。現在は以下のスクリプトを提供しています：
+
+- **Slack通知スクリプト**: Claude Codeの作業状況をSlackに自動通知
+
+今後、さらに多くの便利なフックスクリプトを追加予定です。
 
 ## 必要条件
 
@@ -20,84 +20,87 @@ Claude Code（Anthropic社のCLIツール）の作業イベントをフックし
 - jq（JSON処理用）
 - curl（HTTP通信用）
 - Claude Code（インストール済み）
-- Slack Webhook URL
 
-## クイックスタート
+## インストール
 
 ```bash
-# 1. リポジトリをクローン
+# リポジトリをクローン
 git clone https://github.com/ttrip-ngs/claude-code-hooks.git
 cd claude-code-hooks
 
-# 2. 環境設定ファイルを作成
+# 環境設定ファイルを作成（Slack通知を使用する場合）
 cp .env.example .env
-# .envファイルを編集してSLACK_WEBHOOK_URLに実際のURLを設定
+# .envファイルを編集して必要な設定を行う
+```
 
-# 3. 環境変数を読み込み
+## 利用可能なフックスクリプト
+
+### 1. Slack通知フック
+
+Claude Codeの作業イベントをSlackに通知するスクリプトです。
+
+#### セットアップ
+
+```bash
+# 環境変数を設定
 source .env
 
-# 4. Claude Code設定ファイルを作成
+# Claude Code設定ファイルにフックを追加
 mkdir -p ~/.claude
-cat > ~/.claude/settings.toml << 'EOF'
+cat >> ~/.claude/settings.toml << 'EOF'
 [hooks]
 stop = "/path/to/claude-code-hooks/hooks/stop/slack.sh"
 notification = "/path/to/claude-code-hooks/hooks/notification/slack.sh"
 subagent-stop = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
 EOF
 
-# 5. テスト通知を送信
+# テスト通知
 ./hooks/notification/slack.sh info "セットアップ完了！"
 ```
 
-詳細な手順は [QUICK_START.md](docs/QUICK_START.md) を参照してください。
+詳細は [Slack通知セットアップガイド](docs/slack-notification-setup.md) を参照してください。
 
 ## プロジェクト構造
 
 ```
 claude-code-hooks/
-├── hooks/              # イベントフックスクリプト
+├── hooks/              # フックスクリプト
 │   ├── notification/   # 通知フック
 │   ├── stop/          # 作業完了フック
 │   └── subagent-stop/ # サブエージェント完了フック
 ├── scripts/           # ユーティリティスクリプト
-│   ├── deploy.sh      # デプロイメント支援
-│   └── security_scan.sh # 機密情報検出
 ├── config/            # 設定ファイル
 ├── docs/              # ドキュメント
 └── examples/          # サンプルコード
 ```
 
-## 主な機能
+## 新しいフックスクリプトの追加
 
-### 1. イベント通知
-- **作業完了通知**: Claude Codeの作業終了時に自動通知
-- **エラー通知**: エラー発生時の即座の通知
-- **進捗通知**: 長時間作業の進捗状況を定期通知
+このリポジトリに新しいフックスクリプトを追加する際は、以下の構造に従ってください：
 
-### 2. セキュリティ機能
-- **機密情報検出**: コミット前の自動スキャン
-- **環境変数分離**: 開発・本番環境の安全な分離
-- **Git履歴保護**: 機密情報の履歴への混入防止
+1. `hooks/[イベント名]/[スクリプト名].sh` にスクリプトを配置
+2. 必要な設定ファイルは `config/` に配置
+3. ドキュメントを `docs/` に追加
+4. サンプルコードを `examples/` に追加
 
-### 3. カスタマイズ
-- **通知先設定**: チャンネル、DM、メンション設定
-- **メッセージ形式**: カスタムメッセージテンプレート
-- **フィルタリング**: 通知条件の詳細設定
+## Claude Codeのフックイベント
 
-## ドキュメント
+Claude Codeは以下のイベントでフックをサポートしています：
 
-- [クイックスタート](docs/QUICK_START.md)
-- [詳細セットアップガイド](docs/SETUP_GUIDE.md)
-- [設定リファレンス](docs/setup.md)
+- `notification`: 一般的な通知イベント
+- `stop`: Claude Codeの作業終了時
+- `subagent-stop`: サブエージェントの作業終了時
+
+各イベントの詳細は [Claude Code公式ドキュメント](https://docs.anthropic.com/en/docs/claude-code/hooks) を参照してください。
 
 ## 貢献
 
-プルリクエストを歓迎します！以下の手順で貢献してください：
+新しいフックスクリプトの追加やバグ修正のプルリクエストを歓迎します！
 
 1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m '素晴らしい機能を追加'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
+2. フィーチャーブランチを作成 (`git checkout -b feature/new-hook-script`)
+3. 変更をコミット (`git commit -m '新しいフックスクリプトを追加'`)
+4. ブランチにプッシュ (`git push origin feature/new-hook-script`)
 5. プルリクエストを作成
 
 ## ライセンス
