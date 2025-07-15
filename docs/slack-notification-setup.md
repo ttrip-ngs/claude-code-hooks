@@ -45,20 +45,38 @@ SLACK_MENTION_USER="@username"
 
 ```json
 {
-  "hooks": [
-    {
-      "event": "Stop",
-      "command": "/path/to/claude-code-hooks/hooks/stop/slack.sh"
-    },
-    {
-      "event": "Notification",
-      "command": "/path/to/claude-code-hooks/hooks/notification/slack.sh"
-    },
-    {
-      "event": "SubagentStop",
-      "command": "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
-    }
-  ]
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/claude-code-hooks/hooks/stop/slack.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/claude-code-hooks/hooks/notification/slack.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
