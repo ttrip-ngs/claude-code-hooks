@@ -64,7 +64,7 @@ source ~/.bashrc
 ### 設定ファイルの場所
 ```bash
 # Claude Code設定ファイル
-~/.claude/settings.toml
+~/.claude/settings.json
 ```
 
 ### 基本設定の追加
@@ -77,33 +77,32 @@ PROJECT_PATH=$(pwd)
 echo "プロジェクトパス: $PROJECT_PATH"
 ```
 
-### settings.toml の編集
+### settings.json の編集
 ```bash
 # エディタで設定ファイルを開く
-nano ~/.claude/settings.toml
+nano ~/.claude/settings.json
 # または
-code ~/.claude/settings.toml
+code ~/.claude/settings.json
 ```
 
 ### 設定内容の追加
-```toml
-# Claude Code Hooks 設定
-# プロジェクトパスを実際のパスに置き換えてください
-
-# Stop Hook: 作業完了時の通知
-[[hooks]]
-event = "Stop"
-command = "/home/takuyatakaira/Dev/claude-code-hocks/hooks/stop/slack.sh"
-
-# Notification Hook: 各種通知
-[[hooks]]
-event = "Notification"
-command = "/home/takuyatakaira/Dev/claude-code-hocks/hooks/notification/slack.sh"
-
-# SubagentStop Hook: サブエージェント完了時の通知
-[[hooks]]
-event = "SubagentStop"
-command = "/home/takuyatakaira/Dev/claude-code-hocks/hooks/subagent-stop/slack.sh"
+```json
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/stop/slack.sh"
+    },
+    {
+      "event": "Notification",
+      "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/notification/slack.sh"
+    },
+    {
+      "event": "SubagentStop",
+      "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/subagent-stop/slack.sh"
+    }
+  ]
+}
 ```
 
 ## Step 4: テスト実行
@@ -136,11 +135,11 @@ claude-code --help  # 何らかのコマンドを実行してHookをトリガー
 
 ### 1. 設定ファイルの構文チェック
 ```bash
-# TOMLファイルの構文確認（toml-cliがある場合）
-toml verify ~/.claude/settings.toml
+# JSONファイルの構文確認（jqがある場合）
+jq . ~/.claude/settings.json
 
 # または手動確認
-cat ~/.claude/settings.toml
+cat ~/.claude/settings.json
 ```
 
 ### 2. 環境変数の確認
@@ -175,25 +174,33 @@ claude-code "簡単なテストファイルを作成してください"
 ## 高度な設定（オプション）
 
 ### 複数スクリプトの登録
-```toml
-# 複数の処理を並列実行
-[[hooks]]
-event = "Stop"
-command = "/path/to/claude-code-hocks/hooks/stop/slack.sh"
-
-[[hooks]]
-event = "Stop"
-command = "/path/to/other-script.sh"
-run_in_background = true
+```json
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "command": "/path/to/claude-code-hocks/hooks/stop/slack.sh"
+    },
+    {
+      "event": "Stop",
+      "command": "/path/to/other-script.sh",
+      "run_in_background": true
+    }
+  ]
+}
 ```
 
 ### 条件付き実行
-```toml
-# 特定のツールでのみ実行
-[[hooks]]
-event = "PostToolUse"
-matcher = "Edit|Write|MultiEdit"
-command = "/path/to/claude-code-hocks/hooks/post-tool-use/auto-format.sh"
+```json
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "matcher": "Edit|Write|MultiEdit",
+      "command": "/path/to/claude-code-hocks/hooks/post-tool-use/auto-format.sh"
+    }
+  ]
+}
 ```
 
 ## トラブルシューティング
@@ -232,7 +239,7 @@ which jq
 #### 4. Claude Codeが設定を認識しない
 ```bash
 # 設定ファイルの場所を確認
-ls -la ~/.claude/settings.toml
+ls -la ~/.claude/settings.json
 
 # Claude Codeのバージョン確認
 claude-code --version

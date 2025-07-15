@@ -34,21 +34,23 @@ source .env
 mkdir -p ~/.claude
 
 # 設定ファイル作成
-cat > ~/.claude/settings.toml << EOF
-# Stop Hook: 作業完了時の通知
-[[hooks]]
-event = "Stop"
-command = "/path/to/claude-code-hooks/hooks/stop/slack.sh"
-
-# Notification Hook: 各種通知
-[[hooks]]
-event = "Notification"
-command = "/path/to/claude-code-hooks/hooks/notification/slack.sh"
-
-# SubagentStop Hook: サブエージェント完了時の通知
-[[hooks]]
-event = "SubagentStop"
-command = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+cat > ~/.claude/settings.json << EOF
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "command": "/path/to/claude-code-hooks/hooks/stop/slack.sh"
+    },
+    {
+      "event": "Notification",
+      "command": "/path/to/claude-code-hooks/hooks/notification/slack.sh"
+    },
+    {
+      "event": "SubagentStop",
+      "command": "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+    }
+  ]
+}
 EOF
 ```
 

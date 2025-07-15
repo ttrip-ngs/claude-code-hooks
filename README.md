@@ -47,11 +47,23 @@ source .env
 
 # Claude Code設定ファイルにフックを追加
 mkdir -p ~/.claude
-cat >> ~/.claude/settings.toml << 'EOF'
-[hooks]
-stop = "/path/to/claude-code-hooks/hooks/stop/slack.sh"
-notification = "/path/to/claude-code-hooks/hooks/notification/slack.sh"
-subagent-stop = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+cat > ~/.claude/settings.json << 'EOF'
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "command": "/path/to/claude-code-hooks/hooks/stop/slack.sh"
+    },
+    {
+      "event": "Notification",
+      "command": "/path/to/claude-code-hooks/hooks/notification/slack.sh"
+    },
+    {
+      "event": "SubagentStop",
+      "command": "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+    }
+  ]
+}
 EOF
 
 # テスト通知
