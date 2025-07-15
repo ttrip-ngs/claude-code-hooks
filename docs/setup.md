@@ -59,9 +59,9 @@ source ~/.bashrc
 
 ## Claude Code設定ファイル
 
-### settings.toml形式
+### settings.json形式
 
-`~/.claude/settings.toml`に以下の形式で設定：
+`~/.claude/settings.json`に以下の形式で設定：
 
 ```toml
 # フックイベントごとの設定
@@ -110,7 +110,7 @@ run_in_background = true
 
 ```bash
 chmod 600 .env
-chmod 600 ~/.claude/settings.toml
+chmod 600 ~/.claude/settings.json
 ```
 
 ### 2. Git管理から除外

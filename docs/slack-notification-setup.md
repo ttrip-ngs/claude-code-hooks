@@ -41,23 +41,25 @@ SLACK_MENTION_USER="@username"
 
 ### 3. Claude Code設定ファイルへの登録
 
-`~/.claude/settings.toml`に以下の設定を追加：
+`~/.claude/settings.json`に以下の設定を追加：
 
-```toml
-# 作業完了時の通知
-[[hooks]]
-event = "Stop"
-command = "/path/to/claude-code-hooks/hooks/stop/slack.sh"
-
-# 一般的な通知
-[[hooks]]
-event = "Notification"
-command = "/path/to/claude-code-hooks/hooks/notification/slack.sh"
-
-# サブエージェント完了時の通知
-[[hooks]]
-event = "SubagentStop"
-command = "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+```json
+{
+  "hooks": [
+    {
+      "event": "Stop",
+      "command": "/path/to/claude-code-hooks/hooks/stop/slack.sh"
+    },
+    {
+      "event": "Notification",
+      "command": "/path/to/claude-code-hooks/hooks/notification/slack.sh"
+    },
+    {
+      "event": "SubagentStop",
+      "command": "/path/to/claude-code-hooks/hooks/subagent-stop/slack.sh"
+    }
+  ]
+}
 ```
 
 ### 4. 動作テスト
