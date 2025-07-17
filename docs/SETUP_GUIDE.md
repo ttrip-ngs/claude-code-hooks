@@ -88,20 +88,38 @@ code ~/.claude/settings.json
 ### 設定内容の追加
 ```json
 {
-  "hooks": [
-    {
-      "event": "Stop",
-      "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/stop/slack.sh"
-    },
-    {
-      "event": "Notification",
-      "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/notification/slack.sh"
-    },
-    {
-      "event": "SubagentStop",
-      "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/subagent-stop/slack.sh"
-    }
-  ]
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/stop/slack.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/notification/slack.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/home/takuyatakaira/Dev/claude-code-hocks/hooks/subagent-stop/slack.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
@@ -176,30 +194,41 @@ claude-code "簡単なテストファイルを作成してください"
 ### 複数スクリプトの登録
 ```json
 {
-  "hooks": [
-    {
-      "event": "Stop",
-      "command": "/path/to/claude-code-hocks/hooks/stop/slack.sh"
-    },
-    {
-      "event": "Stop",
-      "command": "/path/to/other-script.sh",
-      "run_in_background": true
-    }
-  ]
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/claude-code-hocks/hooks/stop/slack.sh"
+          },
+          {
+            "type": "command",
+            "command": "/path/to/other-script.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
 ### 条件付き実行
 ```json
 {
-  "hooks": [
-    {
-      "event": "PostToolUse",
-      "matcher": "Edit|Write|MultiEdit",
-      "command": "/path/to/claude-code-hocks/hooks/post-tool-use/auto-format.sh"
-    }
-  ]
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/claude-code-hocks/hooks/post-tool-use/auto-format.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
